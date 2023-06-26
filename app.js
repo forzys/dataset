@@ -4,4 +4,5 @@
 
 
 
-require('./theme.js')
+// require('./theme.js')
+// require('./bing.js')
