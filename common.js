@@ -21,8 +21,16 @@ const dateFormat = function(input) {
             ): date.getTime()
           }
       }
-}
+} 
 
+const jsonFormat = function(text='', init={}) {
+    try{
+        const isJson = ['{}', '[]'].includes(text?.slice(0, 1) + text?.slice(-1)) 
+        return isJson ? JSON.parse(text) : init
+    }catch(e){
+        return init
+    }
+}
 
 const createFile = function(file, data){
     function createDir (name) {
@@ -36,12 +44,24 @@ const createFile = function(file, data){
         }
     }
  
-    if (createDir(path.dirname(file))) {
+    // const files = fs.readdirSync(externalDir); 
+
+    if (createDir(path.dirname(file)) && !!data) {
         fs.writeFileSync(file, data) 
     }
 }
 
+const readFile = function(file){
+    try{
+        createFile(file, '')
+        return fs.readFileSync(file).toString();
+    }catch(e){
+        return ''
+    }
+}
 
 
+exports.readFile = readFile
+exports.jsonFormat = jsonFormat
 exports.dateFormat = dateFormat
 exports.createFile = createFile
