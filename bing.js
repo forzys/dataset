@@ -1,21 +1,13 @@
 
 
-
-const fs = require('fs');
-const path = require('path')
 const https = require('https') 
 const qs = require('querystring');
 const common = require('./common.js') 
 
 
 function getBing(path){ 
-    // https://www.bing.com/hp/api/model?mkt=zh-CN
-
     return new Promise((resolve)=>{
         const bing_data = qs.stringify({
-            // format:'js',
-            // idx:0,
-            // n:7,
             mkt:'zh-CN'
         });
     
@@ -49,21 +41,21 @@ function getBing(path){
 
 function writeBing(text, path){
     const file = common.readFile(path);
-    const current = common.jsonFormat(file, [])
-    const data = common.jsonFormat(text, [])
-
+   
+    const current = common.jsonFormat(file, []) 
     const max = Math.max(...current.map(i=> common.dateFormat(i?.date).format('YYYYMMDD')))
 
+    const data = common.jsonFormat(text, [])
     const find = data?.MediaContents?.filter(item=>Number(item.Ssd.slice(0,8)) > max)
      
     const needAdd = find.map(item=>{
         return {
-            "date": item.Ssd.slice(0,8).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-            "headline":item.ImageContent.Headline,
-            "title": item.ImageContent.Title, 
-            "description":item.ImageContent.Description,
-            "image_url":'https://cn.bing.com' + item.ImageContent.Image.Url, 
-            "main_text": item.ImageContent.QuickFact.MainText,
+            "date": item?.Ssd?.slice(0,8)?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+            "headline":item?.ImageContent?.Headline,
+            "title": item?.ImageContent?.Title, 
+            "description":item?.ImageContent?.Description,
+            "image_url":'https://cn.bing.com' + item?.ImageContent?.Image?.Url, 
+            "main_text": item?.ImageContent?.QuickFact?.MainText,
         }
     }).reverse()
 
