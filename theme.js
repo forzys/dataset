@@ -1,7 +1,7 @@
  
 const qs = require('querystring'); 
 const https = require('https') 
-const config = require('./theme.json') 
+const config = require('./config.json') 
 const common = require('./common.js') 
 
 function PostCode(step, type='new') { 
@@ -56,7 +56,8 @@ function writeThemes(text, type, step){
 
 async function main(){
     try{
-        const {start, end, types = [], updated } = config
+        const theme = config?.theme || {}
+        const { start, end, types = [], updated } = theme
         const today =  common.dateFormat().format('YYYYMMDD')
         
         if(updated !== today){
@@ -68,8 +69,9 @@ async function main(){
             } 
         }
     
-        config.updated = today
-        common.createFile('./theme.json', JSON.stringify(config))
+        theme.updated = today
+        config.theme = theme 
+        common.createFile('./config.json', JSON.stringify(config))
         console.log('Task had done!')
     }catch(e){ console.log('Task had error!') }
    
