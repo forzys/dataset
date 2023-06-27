@@ -4,6 +4,9 @@ name: Dataset application
 on:
   schedule:
     - cron: '0 1 * * *'
+  push:
+    branches:
+      - main
 
 env:
   GITHUB_NAME: imm-o
