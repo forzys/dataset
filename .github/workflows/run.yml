@@ -1,0 +1,29 @@
+ 
+name: Dataset application
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+
+env:
+  GITHUB_NAME: imm-o
+  GITHUB_REPO: dataset 
+  GITHUB_EMAIL: zys@outlook.in 
+
+jobs:
+  build:
+    name:  Cron Run Bing
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install and Run
+        run: yarn && node bing.js 
+        
+      - name: commit
+        run: | 
+          git config --local user.email "${{ env.GITHUB_EMAIL }}"
+          git config --local user.name "${{ env.GITHUB_NAME }}"
+          git add bing/*.json
+          git commit -a -m 'update bing' || echo "nothing to commit"
+          git push || echo "nothing to push" 
