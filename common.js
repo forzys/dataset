@@ -23,9 +23,10 @@ const dateFormat = function(input) {
       }
 } 
 
-const jsonFormat = function(text='', init={}) {
+
+function jsonFormat(text='', init={}) {
     try{
-        const isJson = ['{}', '[]'].includes(text?.slice(0, 1) + text?.slice(-1)) 
+        const isJson = /\[]|{}/.test(text.replace(/(?<=.).*(?=.$)/,''))
         return isJson ? JSON.parse(text) : init
     }catch(e){
         return init
