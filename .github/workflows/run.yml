@@ -6,7 +6,7 @@ on:
     - cron: '0 1 * * *'
 
 env:
-  GITHUB_NAME: imm-o
+  GITHUB_NAME: for2me
   GITHUB_REPO: dataset 
   GITHUB_EMAIL: zys@outlook.in 
 
