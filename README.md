@@ -9,3 +9,6 @@
 ### TODO
     1. update workflows 定时获取gexing壁纸数据
     2. 假期安排数据
+
+### Other Data
+    1. Chinese Color
