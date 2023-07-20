@@ -4,6 +4,7 @@ const common = require('../common/common.js')
 
 const output = './dataset/bing/'
 
+
 function getBing(path){ 
     return new Promise((resolve)=>{
         const bing_data = qs.stringify({

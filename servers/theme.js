@@ -4,6 +4,7 @@ const https = require('https')
 const qs = require('querystring'); 
 const config = require('../common/config.json') 
 const common = require('../common/common.js') 
+
 const output = './dataset/themes/' 
 
 
@@ -77,7 +78,6 @@ async function main(){
         common.createFile('./common/config.json', JSON.stringify(config))
         console.log('Task had done!')
     }catch(e){ console.log('Task had error!') }
-   
 }
 
 main() 
