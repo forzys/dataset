@@ -15,3 +15,6 @@
 <del>1. update workflows 定时获取gexing壁纸数据<del>  
 
     2. 假期安排数据 
+    3. douban 豆瓣新片榜
+    4. 喜马拉雅排行榜
+    
