@@ -67,14 +67,12 @@ function formatHtml(body, extra={}){
 
 function main(){
     const month = common.dateFormat().format('YYYYMM')
-    
     onGetSite('/top').then(async (res)=>{
         if(res.success){
             const infos = formatHtml(res.infos, {type: 'top'})
             for(let page= 0; page < infos.length; page +=1){
                 const info = infos[page]
-                const data = await onGetSite(info.beforeApi)
-  
+                const data = await onGetSite(info.beforeApi) 
                 const datas = JSON.parse(data.infos)
                 const audios = datas.data.tracksAudioPlay?.map(item=>{
                     return {
@@ -87,20 +85,20 @@ function main(){
                     }
                 })
                
+                // 单线程 慢慢跑
                 for(let i = 0; i < audios.length; i+=1){ 
                     const item = audios[i]
                     const track = await onGetSite(item.beforeApi)
-                    const tracks = JSON.parse(track.infos)
-                    audios[i].src = tracks.data.src
+                    const tracks = JSON.parse(track?.infos)
+                    audios[i].src = tracks?.data?.src
                 }
 
-                common.createFile(output + 'top/' + info.id + '.json', JSON.stringify(audios));
-                // 保存
+                // 保存音频信息文件
+                common.createFile(output + 'top/' + info.id + '.json', JSON.stringify(audios)); 
             }   
 
-            common.createFile(output + 'index.json', JSON.stringify(infos));
-
-            // onFileSave( output + 'index.json', JSON.stringify(infos))
+            // index 音频文件索引
+            common.createFile(output + 'index.json', JSON.stringify(infos)); 
         } 
     })
 }

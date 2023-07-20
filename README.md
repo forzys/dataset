@@ -5,6 +5,7 @@
     1. themes 主题色 (themes/new/*.json | themes/popular/*.json)
     2. bing 壁纸 (bing/YYYYMM.json)
     3. gexing 壁纸 (gexing/YYYYMM_{1|2|3}.json)
+    4. 喜马拉雅排行榜(ximalaya/top/*.json)
 
 ### Other Data
     1. Chinese Color 中国色 （themes/chinese/color.json）
