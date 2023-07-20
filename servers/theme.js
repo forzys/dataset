@@ -2,7 +2,7 @@
 
 const https = require('https') 
 const qs = require('querystring'); 
-const config = require('../config.json') 
+const config = require('../common/config.json') 
 const common = require('../common/common.js') 
 const output = './dataset/themes/' 
 
