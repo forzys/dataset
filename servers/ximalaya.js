@@ -12,8 +12,7 @@ const output = './dataset/ximalaya/'
  * @time 每月爬取一次
  */
 
-
-
+ 
 function onGetSite(path){
     return new Promise((resolve)=>{
         const options = {
@@ -66,7 +65,16 @@ function formatHtml(body, extra={}){
 
 
 function main(){
-    const month = common.dateFormat().format('YYYYMM')
+    const month = common.dateFormat().format('YYYYMM') 
+    const ximalaya = config.ximalaya || {}
+    const update =  ximalaya.updated 
+    if(update >= month){ 
+        return console.log('------> Task Done!')
+    }
+    ximalaya.updated = month
+    config.ximalaya = ximalaya
+
+    // Task start
     onGetSite('/top').then(async (res)=>{
         if(res.success){
             const infos = formatHtml(res.infos, {type: 'top'})
@@ -99,7 +107,9 @@ function main(){
 
             // index 音频文件索引
             common.createFile(output + 'index.json', JSON.stringify(infos)); 
-        } 
+            common.createFile('./common/' + 'config.json', JSON.stringify(config)); 
+        }
+       
     })
 }
 
