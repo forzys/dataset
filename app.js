@@ -1,9 +1,4 @@
 
-
-
-
-
-
-// require('./theme.js')
-require('./bing.js')
-require('./gexing.js')
+// require('./servers/theme.js')
+require('./servers/bing.js')
+require('./servers/gexing.js')
