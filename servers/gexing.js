@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const config = require('../config.json')
 const common = require('../common/common.js')
 
-const output = '/dataset/gexing/'
+const output = './dataset/gexing/'
  
 
 function getGexing(index){ 

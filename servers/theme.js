@@ -4,9 +4,7 @@ const https = require('https')
 const qs = require('querystring'); 
 const config = require('../config.json') 
 const common = require('../common/common.js') 
-
-const output = '/dataset/themes/'
-const types = ['new', 'popular']
+const output = './dataset/themes/' 
 
 
 function PostCode(step, type='new') { 
@@ -76,7 +74,7 @@ async function main(){
     
         theme.updated = today
         config.theme = theme 
-        common.createFile('/common/config.json', JSON.stringify(config))
+        common.createFile('./common/config.json', JSON.stringify(config))
         console.log('Task had done!')
     }catch(e){ console.log('Task had error!') }
    

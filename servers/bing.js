@@ -1,8 +1,8 @@
 const https = require('https') 
 const qs = require('querystring');
-const common = require('/common/common.js') 
+const common = require('../common/common.js') 
 
-const output = '/dataset/bing/'
+const output = './dataset/bing/'
 
 function getBing(path){ 
     return new Promise((resolve)=>{
