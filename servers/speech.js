@@ -19,8 +19,7 @@ function main(){
         const infoRegex = /- (.+)/g; 
         const indexRegex = /第 (\d+) 期/;
         const titleRegex = /\[(.+)\]/;
-        const urlRegex = /\((.+)\)/;
-        const monthRegex = /\*\*(.+)月\*\*/
+        const urlRegex = /\((.+)\)/; 
         
         let match;
         const infos = []
@@ -29,15 +28,13 @@ function main(){
                 const info = match[1]
                 const url = info.match(urlRegex);
                 const index = info.match(indexRegex);
-                const title = info.match(titleRegex);
-                const month = info.match(monthRegex);
+                const title = info.match(titleRegex); 
         
                 if (index && index[1]) {
                     infos.push({
                         id: index[1],
                         url: url?.[1],
-                        title: title?.[1], 
-                        month: month?.[1].replace('月', '')
+                        title: title?.[1],  
                     }) 
                 }
             }
