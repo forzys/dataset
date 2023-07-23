@@ -1,4 +1,4 @@
-const https = require('https');
+ 
 const cheerio = require('cheerio'); 
 const config = require('../common/config.json')
 const common = require('../common/common.js')
@@ -8,27 +8,19 @@ const output = './dataset/gexing/'
 
 function getGexing(index){ 
     return new Promise((resolve)=>{
-        const options = {
+ 
+        common.onGetSite({
             method: 'GET', 
-            hostname: 'www.woyaogexing.com',
+            host: 'www.woyaogexing.com',
             path: '/shouji/' + (index === 1 ? 'index' : 'index_'+ index+'.html'),
-        }
-
-        const get_req = https.request(options, function(res) { 
-            let raw = '';
-            res.on('data', (chunk) => {raw += chunk});
-            res.on('end', () => {
-                try {
-                    resolve({ success: true, gexing: formatHtml(raw) })
-                } catch (e) {
-                    console.error(e.message);
-                    resolve({ success: false })
-                }
-            }); 
-        });
-     
-        get_req.on('error', (error) => { console.error(error); }) 
-        get_req.end(); 
+        }).then((res)=>{ 
+            if(res?.success){
+                resolve({  success: true, gexing: formatHtml(res.data) })
+            }else{
+                console.log('---------->', {error})
+                resolve({  success: false, error: res.error, gexing:'' })
+            } 
+        }) 
     }) 
 }
 
@@ -143,7 +135,7 @@ async function main(){
         common.createFile('./common/config.json', JSON.stringify(config));
 
         console.log('Task had done!', name);
-    }catch(e){ console.log('Task had error!') }
+    }catch(e){ console.log('Task had error!' ) }
 }
 
 main()

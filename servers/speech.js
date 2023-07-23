@@ -1,5 +1,3 @@
- 
- 
 const common = require('../common/common.js') 
 
 const output = './dataset/speech/'

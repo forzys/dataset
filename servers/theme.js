@@ -1,7 +1,3 @@
- 
-
-const https = require('https') 
-const qs = require('querystring'); 
 const config = require('../common/config.json') 
 const common = require('../common/common.js') 
 
@@ -10,38 +6,30 @@ const output = './dataset/themes/'
 
 function PostCode(step, type='new') { 
     return new Promise((resolve)=>{
-        const post_data = qs.stringify({
+        const params ={
             step: step,
             sort: type,
             tags: '',
             timeframe: type == 'new' ? 30 :4000, 
-        });
+        }
     
         const options = {
-            hostname: 'colorhunt.co',
+            host: 'colorhunt.co',
             path: '/php/feed.php',
             method: 'POST',
             headers: {
                 "Referer": "https://colorhunt.co/",
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8", 
             },
+            params
         }
-    
-        const post_req = https.request(options, function(res) {
-            const chunks = [];
-            res.on('data',chunk=>chunks.push(chunk));
-            res.on('end', () => {
-                const body = Buffer.concat(chunks);
-                if(res.headers['content-type']?.includes('text/html')){ 
-                    writeThemes(body.toString(), type, step).then(resolve)
-                } 
-            }); 
-        });
-     
-        post_req.on('error', (error) => { console.error(error); })
-        post_req.write(post_data);
-        post_req.end();
 
+        common.onGetSite(options).then((res)=>{
+            const body = Buffer.concat(res.data); 
+            if(res.headers['content-type']?.includes('text/html')){
+                writeThemes(body.toString(), type, step).then(resolve)
+            } 
+        }) 
     }) 
 }
 
@@ -50,10 +38,10 @@ function writeThemes(text, type, step){
         try{
             const name =  [type, step].join('_') + '.json'
             common.createFile(output + type + name, text)
-            resolve({ type, step })
+            resolve({ success: true,  type, step })
         }catch(e){
             console.error(e)
-            resolve(false)
+            resolve({ success: false, })
         }   
     })
 }
@@ -64,13 +52,13 @@ async function main(){
         const { start, end, types = [], updated } = theme
         const today =  common.dateFormat().format('YYYYMMDD')
         
-        if(updated !== today){
+        if(Number(updated) + 7 > Number(today)){
             for(let i= 0; i < types.length; i++){
                 const type = types[i] 
                 for(let step= start; step <= end; step++){
                     await PostCode(step, type);
                 }
-            } 
+            }
         }
     
         theme.updated = today

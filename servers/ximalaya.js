@@ -1,6 +1,3 @@
-
-const https = require('https') 
-const qs = require('querystring');
 const cheerio = require('cheerio'); 
 const common = require('../common/common')
 const config = require('../common/config.json')
@@ -11,33 +8,6 @@ const output = './dataset/ximalaya/'
  * @site https://www.ximalaya.com/top
  * @time 每月爬取一次
  */
-
- 
-function onGetSite(path){
-    return new Promise((resolve)=>{
-        const options = {
-            method: 'GET', 
-            hostname: 'www.ximalaya.com',
-            path: path,
-        }
-
-        const get_req = https.request(options, function(res) { 
-            let raw = '';
-            res.on('data', (chunk) => {raw += chunk});
-            res.on('end', () => {
-                try {
-                    resolve({success: true, infos: raw })
-                } catch (e) {
-                    console.error(e.message);
-                    resolve({ success: false })
-                }
-            }); 
-        });
-
-        get_req.on('error', (error) => { console.error(error); }) 
-        get_req.end(); 
-    })
-}
 
 
 function formatHtml(body, extra={}){
@@ -74,14 +44,16 @@ function main(){
     ximalaya.updated = month
     config.ximalaya = ximalaya
 
+    const host = 'www.ximalaya.com'
+
     // Task start
-    onGetSite('/top').then(async (res)=>{
+    common.onGetSite({ host: 'www.ximalaya.com', path: '/top' }).then(async (res)=>{
         if(res.success){
-            const infos = formatHtml(res.infos, {type: 'top'})
+            const infos = formatHtml(res.data, { type: 'top' });
             for(let page= 0; page < infos.length; page +=1){
                 const info = infos[page]
-                const data = await onGetSite(info.beforeApi) 
-                const datas = JSON.parse(data.infos)
+                const data = await common.onGetSite({ host, path: info.beforeApi, }) 
+                const datas = JSON.parse(data.data)
                 const audios = datas.data.tracksAudioPlay?.map(item=>{
                     return {
                         id: info.id,
@@ -96,8 +68,8 @@ function main(){
                 // 单线程 慢慢跑
                 for(let i = 0; i < audios.length; i+=1){ 
                     const item = audios[i]
-                    const track = await onGetSite(item.beforeApi)
-                    const tracks = JSON.parse(track?.infos)
+                    const track = await common.onGetSite({ path:item.beforeApi, host })
+                    const tracks = JSON.parse(track?.data)
                     audios[i].src = tracks?.data?.src
                 }
 

@@ -1,41 +1,20 @@
-const https = require('https') 
-const qs = require('querystring');
 const common = require('../common/common.js') 
 
 const output = './dataset/bing/'
-
-
+ 
 function getBing(path){ 
-    return new Promise((resolve)=>{
-        const bing_data = qs.stringify({
-            mkt:'zh-CN'
-        });
-    
-        const options = {
-            hostname: 'www.bing.com',
-            path: '/hp/api/model'+'?'+bing_data,
+    return new Promise(()=>{
+        common.onGetSite({
+            host: 'www.bing.com',
+            path: '/hp/api/model',
+            query:{ mkt:'zh-CN' },
             method: 'GET',
             headers: {
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36'
             },
-        }
-
-        const get_req = https.request(options, function(res) { 
-            let raw = '';
-            res.on('data', (chunk) => {raw += chunk});
-            res.on('end', () => {
-              try {
-                writeBing(raw, path)
-                resolve({ success: true })
-              } catch (e) {
-                resolve({ success: false })
-                console.error(e.message);
-              }
-            }); 
-        });
-     
-        get_req.on('error', (error) => { console.error(error); }) 
-        get_req.end(); 
+        }).then((res)=>{
+            res.success ? writeBing(res.data, path) : console.log('---->Error:', res.error)
+        }) 
     }) 
 }
 
@@ -58,7 +37,7 @@ function writeBing(text, path){
             "main_text": item?.ImageContent?.QuickFact?.MainText,
         }
     }).reverse()
-
+    console.log('------>: 保存成功')
     common.createFile(path, JSON.stringify([].concat(current, needAdd)))
 }
 
