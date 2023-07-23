@@ -47,7 +47,7 @@ function main(){
     const host = 'www.ximalaya.com'
 
     // Task start
-    common.onGetSite({ host: 'www.ximalaya.com', path: '/top' }).then(async (res)=>{
+    common.onGetSite({ host, path: '/top' }).then(async (res)=>{
         if(res.success){
             const infos = formatHtml(res.data, { type: 'top' });
             for(let page= 0; page < infos.length; page +=1){
