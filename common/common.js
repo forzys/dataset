@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path')
-
+const http = require('http')
+const https = require('https')
 
 const dateFormat = function(input) { 
     const date = new Date( input || Date.now())
@@ -62,7 +63,38 @@ const readFile = function(file){
 }
 
 
+const onGetSite = ({ host, path, port, method, ssl=true })=>{
+    return new Promise((resolve)=>{
+        const options = {
+            method: method || 'GET', 
+            hostname: host,
+            path: path, 
+            port: port || 443,
+        }
+   
+        const get_req = (ssl ? https : http).request(options, function(res) {
+            let raw = '';
+            res.on('data', (chunk) => {raw += chunk});
+            res.on('end', () => {
+                try {
+                    resolve({ success: true, data: raw })
+                } catch (e) {
+                    console.error(e.message);
+                    resolve({ success: false, error: e })
+                }
+            }); 
+        });
+
+        get_req.on('error', (e) => { resolve({ success: false, error: e }) }) 
+        get_req.end(); 
+    })
+
+}
+ 
+
+
 exports.readFile = readFile
+exports.onGetSite = onGetSite
 exports.jsonFormat = jsonFormat
 exports.dateFormat = dateFormat
 exports.createFile = createFile
