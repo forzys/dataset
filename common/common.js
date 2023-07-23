@@ -50,7 +50,11 @@ const createFile = function(file, data){
 
     if (createDir(path.dirname(file)) && !!data) {
         fs.writeFileSync(file, data) 
+
+        return true
     }
+
+    return true
 }
 
 const readFile = function(file){
