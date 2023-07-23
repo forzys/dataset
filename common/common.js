@@ -1,7 +1,8 @@
-const fs = require('fs');
+const fs = require('fs'); 
 const path = require('path')
 const http = require('http')
 const https = require('https')
+const qs = require('querystring');
 
 const dateFormat = function(input) { 
     const date = new Date( input || Date.now())
@@ -67,30 +68,40 @@ const readFile = function(file){
 }
 
 
-const onGetSite = ({ host, path, port, method, ssl=true })=>{
+const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true })=>{
     return new Promise((resolve)=>{
+        const isPost = String(method).toUpperCase() === 'POST'
+        const get_data = qs.stringify({ ...query });
+        const post_data = qs.stringify({ ...params });
+ 
         const options = {
-            method: method || 'GET', 
             hostname: host,
-            path: path, 
-            port: port || 443,
+            method: method || 'GET',
+            path: [path, get_data].filter(Boolean).join(path?.includes('?') ? '&' : '?'), 
+            port: ssl ? 443 : (port || 80),
+            headers,
         }
    
-        const get_req = (ssl ? https : http).request(options, function(res) {
-            let raw = '';
-            res.on('data', (chunk) => {raw += chunk});
+
+        const method_req = (ssl ? https : http).request(options, function(res) {
+            let raw = isPost ? [] : '';
+            res.on('data', (chunk) => isPost? raw.push(chunk) : raw += chunk );
             res.on('end', () => {
                 try {
-                    resolve({ success: true, data: raw })
+                    resolve({ success: true, data: raw, headers: res?.headers })
                 } catch (e) {
                     console.error(e.message);
-                    resolve({ success: false, error: e })
+                    resolve({ success: false, error: e, headers: res?.headers })
                 }
             }); 
         });
 
-        get_req.on('error', (e) => { resolve({ success: false, error: e }) }) 
-        get_req.end(); 
+       
+        method_req.on('error', (e) => { resolve({ success: false, error: e }) }) 
+        isPost && method_req.write(post_data);
+        method_req.end(); 
+
+        
     })
 
 }
