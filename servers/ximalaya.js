@@ -66,19 +66,28 @@ function main(){
                 })
                
                 // 单线程 慢慢跑
-                for(let i = 0; i < audios.length; i+=1){ 
+                for(let i = 0; i < audios.length; i+=1){  
                     const item = audios[i]
+                    console.log('---------->', item.trackName)
                     const track = await common.onGetSite({ path:item.beforeApi, host })
                     const tracks = JSON.parse(track?.data)
                     audios[i].src = tracks?.data?.src
                 }
 
+                console.log('---------->', info.title)
                 // 保存音频信息文件
                 common.createFile(output + 'top/' + info.id + '.json', JSON.stringify(audios)); 
-            }   
+            }
 
+            const index = common.jsonFormat(common.readFile(output + 'index.json')) || {};
+            const ids = index?.map(i=>i?.id) 
+            const now = infos.filter(info=> !ids?.includes(info.id)) || [] 
+            const _index = index.concat(now); 
+            const menu = { total: _index.length, updated: new Date().getTime() }
+             
             // index 音频文件索引
-            common.createFile(output + 'index.json', JSON.stringify(infos)); 
+            common.createFile(output + 'index.json', JSON.stringify(_index)); 
+            common.createFile(output + 'menu.json', JSON.stringify(menu));
             common.createFile('./common/' + 'config.json', JSON.stringify(config)); 
         }
        
