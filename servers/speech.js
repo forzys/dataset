@@ -58,7 +58,7 @@ function main(){
                 
             if(index != Math.floor(i / 19) || i === infos.length - 1){
                 index = Math.floor(i / 19);
-                common.createFile(output + 'speech' + index + '.json', JSON.stringify(jsonArr))
+                common.createFile(output + 'speech_' + index + '.json', JSON.stringify(jsonArr))
                 console.log('----------创建>', index);
                 jsonArr = [];
             } 
