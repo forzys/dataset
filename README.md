@@ -23,6 +23,10 @@
         文件：dataset/ximalaya/index.json | dataset/ximalaya/top/*.json
         说明：index.json索引title、cover、id等信息。根据id请求ximalaya/top/*.json 
         
+#### 6. 科技爱好者周刊 - 言论类目
+        文件：dataset/speech/speech_*.json
+        说明：20期合并为一个文件 字段： id 第几期 title:标题 speech: 言论数组 url:weekly仓库下存放路径
+        
 
 
 ### TODO
@@ -32,7 +36,7 @@
     2. 假期安排数据 
     3. douban 豆瓣新片榜
 <del>4. 喜马拉雅排行榜<del> 
-    
-    5. 科技爱好者周刊 - 言论
+<del>5. 科技爱好者周刊 - 言论<del> 
+
     
     
