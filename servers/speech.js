@@ -50,15 +50,16 @@ function main(){
             const data = await common.onGetSite({ host, path:'/gh/ruanyf/weekly@master/'+ info?.url });
 
             if(data.success){
-                const artMatch = /^##\s+(言论|本周金句|言论与数字)\s+(\d+\、[\s\S]*?)^##/m.exec(data?.data); 
-                const speech = artMatch?.[2].replace(/\n/g, '').split(/\d、/).filter(Boolean);
+                // const artMatch1 = /^##\s*本周金句\s*(.*)\s^##/m.exec(data?.data); 
+                const artMatch = /^##\s+(言论|本周金句|言论与数字|言论和数字)\s+(\d+\、[\s\S]*?)^##/m.exec(data?.data); 
+                const speech = artMatch?.[2]?.replace(/\n/g, '').split(/\d、/).filter(Boolean);
                 
                 jsonArr.push({ ...info, speech })
             }
                 
-            if(index != Math.floor(i / 19) || i === infos.length - 1){
+            if((index != Math.floor(i / 19)) || (i === infos.length - 1)){
                 index = Math.floor(i / 19);
-                common.createFile(output + 'speech_' + index + '.json', JSON.stringify(jsonArr))
+                await common.createFile(output + 'speech_' + index + '.json', JSON.stringify(jsonArr))
                 console.log('----------创建>', index);
                 jsonArr = [];
             } 
