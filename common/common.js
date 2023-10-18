@@ -106,8 +106,7 @@ const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true 
 
 }
  
-
-
+ 
 exports.readFile = readFile
 exports.onGetSite = onGetSite
 exports.jsonFormat = jsonFormat

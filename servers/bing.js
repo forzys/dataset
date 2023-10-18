@@ -41,11 +41,12 @@ function writeBing(text, path){
     common.createFile(path, JSON.stringify([].concat(current, needAdd)))
 }
 
-
 function main(){
     const month = common.dateFormat().format('YYYYMM')
     getBing(output + month + '.json')
 }
- 
 
-main()
+module.exports = main;
+
+
+ 

@@ -68,6 +68,6 @@ async function main(){
     }catch(e){ console.log('Task had error!') }
 }
 
-main() 
+module.exports = main;
 
 

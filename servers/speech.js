@@ -9,9 +9,7 @@ const output = './dataset/speech/'
  */
 
 function main(){
-   
-    const host = 'cdn.jsdelivr.net'
-  
+    const host = 'cdn.jsdelivr.net' 
     common.onGetSite({ path: '/gh/ruanyf/weekly@master/README.md', host }).then(async (res)=>{ 
         const text = res.data  
         const infoRegex = /- (.+)/g; 
@@ -64,9 +62,9 @@ function main(){
         } 
 
         console.log('Task Had Done!') 
-    }) 
-    
+    })  
 }
 
 
-main()
+module.exports = main;
+ 

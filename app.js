@@ -1,5 +1,11 @@
 
-// require('./servers/theme.js')
-require('./servers/bing.js')
-require('./servers/gexing.js')
-require('./servers/ximalaya.js')
+ 
+const servers = require("./servers") 
+
+
+void (async () => {
+    for (const task of servers) {
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        await task();
+    }
+})();

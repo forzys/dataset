@@ -32,8 +32,7 @@ function formatHtml(body, extra={}){
     return infos 
 }
    
-
-
+ 
 function main(){
     const month = common.dateFormat().format('YYYYMM') 
     const ximalaya = config.ximalaya || {}
@@ -94,5 +93,5 @@ function main(){
     })
 }
 
-
-main()
+module.exports = main;
+ 
