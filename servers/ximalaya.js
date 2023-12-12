@@ -40,7 +40,7 @@ module.exports = function main(){
     const ximalaya = config.ximalaya || {}
     const update =  ximalaya.updated 
     if(update >= month){ 
-        return console.log('------>Ximalaya had Done!')
+        return console.log('------>: Ximalaya had Done!')
     }
     ximalaya.updated = month
     config.ximalaya = ximalaya
@@ -91,7 +91,7 @@ module.exports = function main(){
             common.createFile(output + 'menu.json', JSON.stringify(menu));
             common.createFile('./common/' + 'config.json', JSON.stringify(config)); 
         }
-        console.log('------>Ximalaya had Done!')
+        console.log('------>: Ximalaya had Done!')
     })
 }
  
