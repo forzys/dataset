@@ -42,7 +42,7 @@ module.exports = function main(){
       
         for(let i = 0; i < infos.length; i += 1){ 
             const info = infos[i]
-            console.log('----->', info.title)
+            console.info(`          ${ Math.floor(i / infos.length * 100)}%   ----->`, info.title)
             const data = await common.onGetSite({ host, path:'/gh/ruanyf/weekly@master/'+ info?.url });
 
             if(data.success){
@@ -56,7 +56,7 @@ module.exports = function main(){
             if((index != Math.floor(i / 19)) || (i === infos.length - 1)){
                 index = Math.floor(i / 19);
                 await common.createFile(output + 'speech_' + index + '.json', JSON.stringify(jsonArr))
-                console.log('----------创建>', index);
+                console.log('       ----------创建>', index);
                 jsonArr = [];
             } 
         }
