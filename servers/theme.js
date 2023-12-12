@@ -46,7 +46,7 @@ function writeThemes(text, type, step){
     })
 }
 
-async function main(){
+module.exports = async function main(){
     try{
         const theme = config?.theme || {}
         const { start, end, types = [], updated } = theme
@@ -63,11 +63,8 @@ async function main(){
     
         theme.updated = today
         config.theme = theme 
-        common.createFile('./common/config.json', JSON.stringify(config))
-        console.log('Task had done!')
+        common.createFile('./common/config.json', JSON.stringify(config)) 
+        console.log('------>: Theme had done!')
+
     }catch(e){ console.log('Task had error!') }
 }
-
-module.exports = main;
-
-

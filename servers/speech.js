@@ -8,7 +8,7 @@ const output = './dataset/speech/'
  * - 每20期保存一个文件
  */
 
-function main(){
+module.exports = function main(){
     const host = 'cdn.jsdelivr.net' 
     common.onGetSite({ path: '/gh/ruanyf/weekly@master/README.md', host }).then(async (res)=>{ 
         const text = res.data  
@@ -59,12 +59,8 @@ function main(){
                 console.log('----------创建>', index);
                 jsonArr = [];
             } 
-        } 
-
-        console.log('Task Had Done!') 
+        }
+        console.log('------>: Speech had done!')
     })  
 }
-
-
-module.exports = main;
  

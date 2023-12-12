@@ -33,12 +33,14 @@ function formatHtml(body, extra={}){
 }
    
  
-function main(){
+
+
+module.exports = function main(){
     const month = common.dateFormat().format('YYYYMM') 
     const ximalaya = config.ximalaya || {}
     const update =  ximalaya.updated 
     if(update >= month){ 
-        return console.log('------> Task Done!')
+        return console.log('------>Ximalaya had Done!')
     }
     ximalaya.updated = month
     config.ximalaya = ximalaya
@@ -89,9 +91,7 @@ function main(){
             common.createFile(output + 'menu.json', JSON.stringify(menu));
             common.createFile('./common/' + 'config.json', JSON.stringify(config)); 
         }
-       
+        console.log('------>Ximalaya had Done!')
     })
 }
-
-module.exports = main;
  

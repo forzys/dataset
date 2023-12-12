@@ -3,6 +3,7 @@ const path = require('path')
 const http = require('http')
 const https = require('https')
 const qs = require('querystring');
+const cheerio = require('cheerio'); 
 
 const dateFormat = function(input) { 
     const date = new Date( input || Date.now())
@@ -23,8 +24,7 @@ const dateFormat = function(input) {
             ): date.getTime()
           }
       }
-} 
-
+}
 
 function jsonFormat(text='', init={}) {
     try{
@@ -81,7 +81,6 @@ const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true 
             port: ssl ? 443 : (port || 80),
             headers,
         }
-   
 
         const method_req = (ssl ? https : http).request(options, function(res) {
             let raw = isPost ? [] : '';
@@ -95,17 +94,20 @@ const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true 
                 }
             }); 
         });
-
        
         method_req.on('error', (e) => { resolve({ success: false, error: e }) }) 
         isPost && method_req.write(post_data);
-        method_req.end(); 
-
-        
+        method_req.end();
     })
 
 }
  
+
+
+exports.formatHtml = function formatHtml(body, callback){
+    const $ = cheerio.load(body, { decodeEntities: false })
+    return callback($)
+}
  
 exports.readFile = readFile
 exports.onGetSite = onGetSite

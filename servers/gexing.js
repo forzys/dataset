@@ -1,14 +1,9 @@
- 
-const cheerio = require('cheerio'); 
 const config = require('../common/config.json')
 const common = require('../common/common.js')
-
 const output = './dataset/gexing/'
- 
 
 function getGexing(index){ 
-    return new Promise((resolve)=>{
- 
+    return new Promise((resolve)=>{ 
         common.onGetSite({
             method: 'GET', 
             host: 'www.woyaogexing.com',
@@ -24,25 +19,21 @@ function getGexing(index){
     }) 
 }
 
-
 function formatHtml(body){
-    const imgs = [] 
-    const $ = cheerio.load(body, { decodeEntities: false })
-
-    $('.pMain .txList-sj', '#main').each(function () {
-        imgs.push({
-            title: $('a.img', this)?.attr('title'),
-            href: $($('a.img',this).html())?.attr('src'),
-            date: $('p span', this).text()?.replace('月','')?.replace('日',''),
-            month:$('p span', this).text()?.split('月')?.shift(),
-            day:$('p span', this).text()?.split('月')?.pop()?.replace('日', ''),
-
+    return common.formatHtml(body, ($)=>{
+        const imgs = []
+        $('.pMain .txList-sj', '#main').each(function () {
+            imgs.push({
+                title: $('a.img', this)?.attr('title'),
+                href: $($('a.img',this).html())?.attr('src'),
+                date: $('p span', this).text()?.replace('月','')?.replace('日',''),
+                month:$('p span', this).text()?.split('月')?.shift(),
+                day:$('p span', this).text()?.split('月')?.pop()?.replace('日', ''), 
+            })
         })
+        return imgs
     })
-
-    return imgs 
 }
-
 
 function onGetName(info){
     const day = Number(info.day)
@@ -91,10 +82,9 @@ function onGetName(info){
    
 
 //     console.log('Task had done!!') 
-// }
+// } 
 
-
-async function main(){
+module.exports = async function main(){
     try{
         const gexing = config?.gexing || {} 
         const date = common.dateFormat().format('YYYYMMDD')
@@ -128,16 +118,14 @@ async function main(){
         const name = year + updated + '.json';
 
         gexing.updated = base
-        config.gexing = gexing
-
+        config.gexing = gexing 
  
         common.createFile(output + name , JSON.stringify(after[base]));
         common.createFile('./common/config.json', JSON.stringify(config));
 
-        console.log('Task had done!', name);
+        // console.log('Task had done!', name);
+        console.log('------>: Gexing had done!') 
     }catch(e){ console.log('Task had error!' ) }
-}
-
-module.exports = main;
+} 
 
  

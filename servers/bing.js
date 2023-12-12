@@ -1,5 +1,4 @@
-const common = require('../common/common.js') 
-
+const common = require('../common/common.js')
 const output = './dataset/bing/'
  
 function getBing(path){ 
@@ -37,16 +36,15 @@ function writeBing(text, path){
             "main_text": item?.ImageContent?.QuickFact?.MainText,
         }
     }).reverse()
-    console.log('------>: 保存成功')
+    // console.log('------>: 保存成功')
     common.createFile(path, JSON.stringify([].concat(current, needAdd)))
 }
-
-function main(){
+ 
+module.exports = function main(){
     const month = common.dateFormat().format('YYYYMM')
     getBing(output + month + '.json')
-}
-
-module.exports = main;
+    console.log('------>: Bing had done!')
+};
 
 
  
