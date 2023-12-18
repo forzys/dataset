@@ -68,8 +68,12 @@ const readFile = function(file){
 }
 
 
+
+const wait = (delay)=> new Promise((resolve)=> setTimeout(resolve,delay))
+
+
 const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true })=>{
-    return new Promise((resolve)=>{
+    return new Promise((resolve, reject)=>{
         const isPost = String(method).toUpperCase() === 'POST'
         const get_data = qs.stringify({ ...query });
         const post_data = qs.stringify({ ...params });
@@ -80,24 +84,30 @@ const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true 
             path: [path, get_data].filter(Boolean).join(path?.includes('?') ? '&' : '?'), 
             port: ssl ? 443 : (port || 80),
             headers,
-        }
+        } 
+      
+            const method_req = (ssl ? https : http).request(options, function(res) {
 
-        const method_req = (ssl ? https : http).request(options, function(res) {
-            let raw = isPost ? [] : '';
-            res.on('data', (chunk) => isPost? raw.push(chunk) : raw += chunk );
-            res.on('end', () => {
-                try {
+                let raw = isPost ? [] : '';
+
+                res.on('data', (chunk) => {
+                    isPost ? raw.push(chunk) : raw += chunk 
+                });
+
+                res.on('end', () => {
                     resolve({ success: true, data: raw, headers: res?.headers })
-                } catch (e) {
-                    console.error(e.message);
-                    resolve({ success: false, error: e, headers: res?.headers })
-                }
-            }); 
-        });
-       
-        method_req.on('error', (e) => { resolve({ success: false, error: e }) }) 
-        isPost && method_req.write(post_data);
-        method_req.end();
+                });
+
+                res.on("error",(e)=>{
+                    resolve({ success: false, error: e, headers: res?.headers }) 
+                })
+            });
+ 
+            method_req.on('error', (e) => {
+                resolve({ success: false, error: e }) 
+            }) 
+            isPost && method_req.write(post_data);
+            method_req.end(); 
     })
 
 }
@@ -109,6 +119,7 @@ exports.formatHtml = function formatHtml(body, callback){
     return callback($)
 }
  
+exports.wait = wait
 exports.readFile = readFile
 exports.onGetSite = onGetSite
 exports.jsonFormat = jsonFormat

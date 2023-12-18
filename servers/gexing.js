@@ -12,7 +12,7 @@ function getGexing(index){
             if(res?.success){
                 resolve({  success: true, gexing: formatHtml(res.data) })
             }else{
-                console.log('---------->', {error})
+                console.log('---------->', {error: res.error})
                 resolve({  success: false, error: res.error, gexing:'' })
             } 
         }) 
