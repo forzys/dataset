@@ -3,6 +3,7 @@ const path = require('path')
 const http = require('http')
 const https = require('https')
 const qs = require('querystring');
+const os = require('os');
 const cheerio = require('cheerio'); 
 
 const dateFormat = function(input) { 
@@ -67,10 +68,7 @@ const readFile = function(file){
     }
 }
 
-
-
 const wait = (delay)=> new Promise((resolve)=> setTimeout(resolve,delay))
-
 
 const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true })=>{
     return new Promise((resolve, reject)=>{
@@ -109,14 +107,29 @@ const onGetSite = ({ host, path, port, method, query, params, headers, ssl=true 
             isPost && method_req.write(post_data);
             method_req.end(); 
     })
-
 }
  
-
-
 exports.formatHtml = function formatHtml(body, callback){
     const $ = cheerio.load(body, { decodeEntities: false })
     return callback($)
+}
+
+
+
+const getIp = function(){
+    const networkInterfaces = os.networkInterfaces();
+    const ipAddresses = [];
+
+    Object.keys(networkInterfaces).forEach(interfaceName => {
+    const interfaces = networkInterfaces[interfaceName];
+    interfaces.forEach(interfaceInfo => {
+        if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) {
+        ipAddresses.push(interfaceInfo.address);
+        }
+    });
+    });
+
+    return ipAddresses
 }
  
 exports.wait = wait
@@ -125,3 +138,4 @@ exports.onGetSite = onGetSite
 exports.jsonFormat = jsonFormat
 exports.dateFormat = dateFormat
 exports.createFile = createFile
+exports.getIp = getIp

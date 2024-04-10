@@ -4,7 +4,7 @@ var https = require("https");
 
 var contentHeader = {
     'Access-Control-Allow-Origin':'*',
-    'Content-Type': "application/json;charset=utf-8",
+    'Content-Type': "image/jpeg",
 }
 
 /**
