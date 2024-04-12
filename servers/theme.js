@@ -37,7 +37,7 @@ function writeThemes(text, type, step){
     return new Promise((resolve)=>{
         try{
             const name =  [type, step].join('_') + '.json'
-            common.createFile(output + type + name, text)
+            common.createFile(output + type + '/' + name, text)
             resolve({ success: true,  type, step })
         }catch(e){
             console.error(e)
